@@ -1,0 +1,239 @@
+{
+	"info": {
+		"_postman_id": "4fbf0b16-056d-46b9-9310-5932033c97d5",
+		"name": "Xero OAuth 2.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get started",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"xero-tenant-id\", data[0].TenantId);",
+							"",
+							"tests[\"xero-tenant-id: \" + pm.environment.get(\"xero-tenant-id\")] = true;"
+						]
+					}
+				}
+			],
+			"_postman_id": "75cb11e1-226e-447f-a262-0e9ba8690381",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": {
+						"accessToken": "",
+						"addTokenTo": "header",
+						"tokenType": "Bearer"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "https://api.xero.com/connections"
+			},
+			"response": []
+		},
+		{
+			"name": "Connections",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"xero-tenant-id\", data[0].TenantId);",
+							"",
+							"tests[\"xero-tenant-id: \" + pm.environment.get(\"xero-tenant-id\")] = true;"
+						]
+					}
+				}
+			],
+			"_postman_id": "d403f559-3c8b-4244-9813-9e18bd7ef77d",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"url": "https://api.xero.com/connections"
+			},
+			"response": []
+		},
+		{
+			"name": "Invoices",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"    tokenUrl = 'https://identity.xero.com/connect/token'",
+							"    clientId = pm.variables.get('client_id'),",
+							"    clientSecret = pm.variables.get('client_secret'),",
+							"    refreshToken = pm.variables.get('refresh_token'),",
+							"    requestOptions = {",
+							"      method: 'POST',",
+							"      url: tokenUrl,",
+							"      body: {",
+							"        mode: 'formdata',",
+							"        formdata: [",
+							"            {",
+							"                key: 'grant_type',",
+							"                value: 'refresh_token'",
+							"            },",
+							"            {",
+							"                key: 'client_id',",
+							"                value: clientId",
+							"            },",
+							"            {",
+							"                key: 'client_secret',",
+							"                value: clientSecret",
+							"            },",
+							"            {",
+							"                key: 'refresh_token',",
+							"                value: refreshToken",
+							"            }",
+							"        ]",
+							"      }",
+							"    };",
+							"",
+							"console.log({ requestOptions });",
+							"",
+							"pm.sendRequest(requestOptions, (err, response) => {",
+							"  let jsonResponse = response.json(),",
+							"      newAccessToken = jsonResponse.access_token;",
+							"      newRefreshToken = jsonResponse.refresh_token;",
+							"      ",
+							"  console.log({ err, jsonResponse, newAccessToken, newRefreshToken })",
+							"  ",
+							"  pm.environment.set('access_token', newAccessToken);",
+							"  pm.environment.set('refresh_token', newRefreshToken);",
+							"  ",
+							"});"
+						]
+					}
+				}
+			],
+			"_postman_id": "3d3cb001-719e-414a-aced-143ec92c0902",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "xero-tenant-id",
+						"value": "{{xero-tenant-id}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": "https://api.xero.com/api.xro/2.0/Invoices",
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"access_token\", data.access_token);",
+							"postman.setEnvironmentVariable(\"refresh_token\", data.refresh_token);",
+							"",
+							"tests[\"Access Token: \" + pm.environment.get(\"access_token\") + \" Refresh Token: \" + pm.environment.get(\"refresh_token\")] = true;"
+						]
+					}
+				}
+			],
+			"_postman_id": "93195627-3e77-4e50-9440-89dbef84eee2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "grant_type",
+						"value": "refresh_token",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "https://identity.xero.com/connect/token?=",
+					"protocol": "https",
+					"host": [
+						"identity",
+						"xero",
+						"com"
+					],
+					"path": [
+						"connect",
+						"token"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
