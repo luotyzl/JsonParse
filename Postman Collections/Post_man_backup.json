@@ -21,7 +21,7 @@
 					}
 				}
 			],
-			"_postman_id": "75cb11e1-226e-447f-a262-0e9ba8690381",
+			"id": "75cb11e1-226e-447f-a262-0e9ba8690381",
 			"request": {
 				"auth": {
 					"type": "oauth2",
@@ -53,7 +53,7 @@
 					}
 				}
 			],
-			"_postman_id": "d403f559-3c8b-4244-9813-9e18bd7ef77d",
+			"id": "d403f559-3c8b-4244-9813-9e18bd7ef77d",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -122,7 +122,7 @@
 					}
 				}
 			],
-			"_postman_id": "3d3cb001-719e-414a-aced-143ec92c0902",
+			"id": "3d3cb001-719e-414a-aced-143ec92c0902",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -169,7 +169,7 @@
 					}
 				}
 			],
-			"_postman_id": "93195627-3e77-4e50-9440-89dbef84eee2",
+			"id": "93195627-3e77-4e50-9440-89dbef84eee2",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -208,10 +208,7 @@
 							"value": "{{client_secret}}",
 							"type": "text"
 						}
-					],
-					"options": {
-						"formdata": {}
-					}
+					]
 				},
 				"url": {
 					"raw": "https://identity.xero.com/connect/token?=",
@@ -232,6 +229,18 @@
 						}
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"id": "a00724e8-812e-46b8-8b71-05d10d4b4ebd",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}
